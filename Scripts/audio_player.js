@@ -1,6 +1,4 @@
-﻿import React from 'react';
-
-var Audio = React.createClass({
+﻿var Audio = React.createClass({
     displayName: "Audio",
     render: function () {
         return (
@@ -80,5 +78,3 @@ React.render(
 React.createElement(Comp, null),
 document.getElementById('content')
 );
-
-export default audio_player;
