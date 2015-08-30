@@ -1,28 +1,6 @@
-﻿var duration;
-var pAudio = document.getElementById("audio");
-var pHead = document.getElementById("playhead");
-var pButton = document.getElementById('pButton');
-var timeline = document.getElementById('timeline');
-// timeline width adjusted for playhead
-var timelineWidth = timeline.offsetWidth - pHead.offsetWidth;
-var canvas = document.getElementById("vocabulary");
-var ctx = canvas.getContext("2d");
-
-function timeUpdate() {
-    var playPercent = timelineWidth * (pAudio.currentTime / duration);
-    pHead.style.marginLeft = playPercent + "px";
-
-    showVacabulary(pAudio.currentTime);
-
-    if (pAudio.currentTime === duration) {
-        pButton.className = "play";
-        pAudio.pause();
-        pAudio.currentTime = 0;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-}
-
-function showVacabulary(currentTime) {
+﻿function showVacabulary(currentTime) {
+    var canvas = document.getElementById("vocabulary");
+    var ctx = canvas.getContext("2d");
     ctx.font = "40px Arial";
 
     switch (true) {
@@ -146,58 +124,7 @@ function showVacabulary(currentTime) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillText("zenfone", 30, 70);
             break;
-    }
-}
-
-pAudio.addEventListener("timeupdate", timeUpdate, false);
-pAudio.addEventListener("canplaythrough", function () {
-    duration = pAudio.duration;
-}, false);
-
-timeline.addEventListener("click", function (event) {
-    moveplayhead(event);
-    pAudio.currentTime = duration * clickPercent(event);
-}, false);
-
-function clickPercent(e) {
-    return (e.pageX - timeline.offsetLeft) / timelineWidth;
-}
-
-playhead.addEventListener('mousedown', mouseDown, false);
-window.addEventListener('mouseup', mouseUp, false);
-
-// Boolean value so that mouse is moved on mouseUp only when the playhead is released 
-var onplayhead = false;
-// mouseDown EventListener
-function mouseDown() {
-    onplayhead = true;
-    window.addEventListener('mousemove', moveplayhead, true);
-    pAudio.removeEventListener('timeupdate', timeUpdate, false);
-}
-// mouseUp EventListener
-// getting input from all mouse clicks
-function mouseUp(e) {
-    if (onplayhead == true) {
-        moveplayhead(e);
-        window.removeEventListener('mousemove', moveplayhead, true);
-        // change current time
-        pAudio.currentTime = duration * clickPercent(e);
-        pAudio.addEventListener('timeupdate', timeUpdate, false);
-    }
-    onplayhead = false;
-}
-
-// mousemove EventListener
-// Moves playhead as user drags
-function moveplayhead(e) {
-    var newMargLeft = e.pageX - timeline.offsetLeft;
-    if (newMargLeft >= 0 && newMargLeft <= timelineWidth) {
-        pHead.style.marginLeft = newMargLeft + "px";
-    }
-    if (newMargLeft < 0) {
-        pHead.style.marginLeft = "0px";
-    }
-    if (newMargLeft > timelineWidth) {
-        pHead.style.marginLeft = timelineWidth + "px";
+        default:
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 }
